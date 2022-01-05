@@ -2,11 +2,11 @@
   "name": "task-manager",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/app.js",
   "scripts": {
-    "start": "tsc && node dist/weather-app/src/app.js",
-    "debug": "tsc && node inspect dist/weather-app/src/app.js",
-    "dev": "nodemon --ext 'ts,hbs' weather-app/src/app.ts",
+    "start": "tsc && node dist/app.js",
+    "debug": "tsc && node inspect dist/app.js",
+    "dev": "nodemon --ext 'ts,hbs' src/app.ts",
     "build": "tsc"
   },
   "keywords": [],
@@ -22,6 +22,10 @@
     "typescript": "^4.4.4"
   },
   "dependencies": {
-    "mongodb": "^4.2.2"
+    "@types/mongodb": "^4.0.7",
+    "@types/validator": "^13.7.1",
+    "mongodb": "^4.2.2",
+    "mongoose": "^6.1.5",
+    "validator": "^13.7.0"
   }
 }
