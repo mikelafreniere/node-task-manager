@@ -9,7 +9,11 @@ interface User {
 }
 
 const userSchema = new Schema<User>({
-  name: { type: String, required: true, trim: true },
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   email: {
     type: String,
     required: true,

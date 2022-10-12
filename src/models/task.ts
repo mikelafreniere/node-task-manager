@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 
 interface Task {
   description: string;
-  completed?: boolean;
+  completed: boolean;
 }
 
 const taskSchema = new Schema<Task>({
