@@ -2,11 +2,15 @@ import * as express from 'express';
 import * as mongoose from 'mongoose';
 import { TaskModel, Task } from '../model/task';
 import { StatusCodes } from 'http-status-codes';
-import { isValidUpdate } from './adapters/adapters';
+import { isValidRequest } from './adapters/adapters';
 
 export const router = express.Router();
 
 router.post('/tasks', async (req, res) => {
+  if (!isValidRequest(Task, req)) {
+    return res.status(StatusCodes.BAD_REQUEST).send({ error: 'Invalid create request' });
+  }
+
   const newTask = new TaskModel(req.body);
   try {
     const task = await newTask.save();
@@ -43,7 +47,7 @@ router.get('/tasks/:id', async (req, res) => {
 });
 
 router.patch('/tasks/:id', async (req, res) => {
-  if (!isValidUpdate(Task, req)) {
+  if (!isValidRequest(Task, req)) {
     return res.status(StatusCodes.BAD_REQUEST).send({ error: 'Invalid update request' });
   }
 

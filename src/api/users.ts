@@ -2,11 +2,15 @@ import * as express from 'express';
 import * as mongoose from 'mongoose';
 import { UserModel, User } from '../model/user';
 import { StatusCodes } from 'http-status-codes';
-import { isValidUpdate } from './adapters/adapters';
+import { isValidRequest } from './adapters/adapters';
 
 export const router = express.Router();
 
 router.post('/users', async (req, res) => {
+  if (!isValidRequest(User, req)) {
+    return res.status(StatusCodes.BAD_REQUEST).send({ error: 'Invalid create request' });
+  }
+
   const newUser = new UserModel(req.body);
   try {
     const user = await newUser.save();
@@ -43,7 +47,7 @@ router.get('/users/:id', async (req, res) => {
 });
 
 router.patch('/users/:id', async (req, res) => {
-  if (!isValidUpdate(User, req)) {
+  if (!isValidRequest(User, req)) {
     return res.status(StatusCodes.BAD_REQUEST).send({ error: 'Invalid update request' });
   }
 
