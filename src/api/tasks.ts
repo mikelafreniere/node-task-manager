@@ -63,3 +63,20 @@ router.patch('/tasks/:id', async (req, res) => {
     return res.status(StatusCodes.BAD_REQUEST).send(err);
   }
 });
+
+router.delete('/tasks/:id', async (req, res) => {
+  const _id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(_id)) {
+    return res.status(StatusCodes.BAD_REQUEST).send({ error: 'Invalid task ID' });
+  }
+
+  try {
+    const task = await TaskModel.findByIdAndDelete(_id);
+    if (!task) {
+      return res.status(StatusCodes.NOT_FOUND).send({ error: 'Task not found' });
+    }
+    return res.status(StatusCodes.OK).send(task);
+  } catch (err) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
+  }
+});

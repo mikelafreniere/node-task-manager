@@ -63,3 +63,20 @@ router.patch('/users/:id', async (req, res) => {
     return res.status(StatusCodes.BAD_REQUEST).send(err);
   }
 });
+
+router.delete('/users/:id', async (req, res) => {
+  const _id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(_id)) {
+    return res.status(StatusCodes.BAD_REQUEST).send({ error: 'Invalid user ID' });
+  }
+
+  try {
+    const user = await UserModel.findByIdAndDelete(_id);
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).send({ error: 'User not found' });
+    }
+    return res.status(StatusCodes.OK).send(user);
+  } catch (err) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(err);
+  }
+});
