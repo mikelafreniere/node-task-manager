@@ -1,8 +1,8 @@
 import { Schema, model } from 'mongoose';
 
-interface Task {
-  description: string;
-  completed: boolean;
+export class Task {
+  description: string = '';
+  completed: boolean = false;
 }
 
 const taskSchema = new Schema<Task>({

@@ -1,10 +1,10 @@
 import { Schema, model } from 'mongoose';
 import { default as validator } from 'validator';
 
-interface User {
-  name: string;
-  email: string;
-  password: string;
+export class User {
+  name: string = '';
+  email: string = '';
+  password: string = '';
   age?: number;
 }
 
