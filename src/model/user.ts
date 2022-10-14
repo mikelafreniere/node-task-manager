@@ -5,7 +5,7 @@ export class User {
   name: string = '';
   email: string = '';
   password: string = '';
-  age?: number;
+  age?: number = 0;
 }
 
 const userSchema = new Schema<User>({
