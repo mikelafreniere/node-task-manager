@@ -1,19 +1,16 @@
 import * as express from 'express';
 import * as mongoose from 'mongoose';
-import { UserModel, User } from '../model/user';
+import { User, UserDocument } from '../model/user';
 import { StatusCodes } from 'http-status-codes';
-import { isValidRequest } from './adapters/adapters';
+import { isValidUpdate } from './adapters/adapters';
 
 export const router = express.Router();
 
-router.post('/users', async (req, res) => {
-  if (!isValidRequest(User, req)) {
-    return res.status(StatusCodes.BAD_REQUEST).send({ error: 'Invalid create request' });
-  }
+// TODO: omit passwords from returned users
 
-  const newUser = new UserModel(req.body);
+router.post('/users', async (req, res) => {
   try {
-    const user = await newUser.save();
+    const user = await User.create(req.body);
     return res.status(StatusCodes.CREATED).send(user.toJSON());
   } catch (err) {
     return res.status(StatusCodes.BAD_REQUEST).send(err);
@@ -22,7 +19,7 @@ router.post('/users', async (req, res) => {
 
 router.get('/users', async (req, res) => {
   try {
-    const users = await UserModel.find({});
+    const users = await User.find({});
     return res.status(StatusCodes.OK).send(users);
   } catch (err) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Unable to list users');
@@ -36,7 +33,7 @@ router.get('/users/:id', async (req, res) => {
   }
 
   try {
-    const user = await UserModel.findById(_id);
+    const user = await User.findById(_id);
     if (!user) {
       return res.status(StatusCodes.NOT_FOUND).send({ error: 'User not found' });
     }
@@ -47,9 +44,7 @@ router.get('/users/:id', async (req, res) => {
 });
 
 router.patch('/users/:id', async (req, res) => {
-  if (!isValidRequest(User, req)) {
-    return res.status(StatusCodes.BAD_REQUEST).send({ error: 'Invalid update request' });
-  }
+  // TODO: build update user schema validator
 
   const _id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(_id)) {
@@ -57,7 +52,7 @@ router.patch('/users/:id', async (req, res) => {
   }
 
   try {
-    const user = await UserModel.findByIdAndUpdate(_id, req.body, { new: true, runValidators: true });
+    const user = await User.findByIdAndUpdate(_id, req.body, { new: true, runValidators: true });
     if (!user) {
       return res.status(StatusCodes.NOT_FOUND).send({ error: 'User not found' });
     }
@@ -75,7 +70,7 @@ router.delete('/users/:id', async (req, res) => {
   }
 
   try {
-    const user = await UserModel.findByIdAndDelete(_id);
+    const user = await User.findByIdAndDelete(_id);
     if (!user) {
       return res.status(StatusCodes.NOT_FOUND).send({ error: 'User not found' });
     }
